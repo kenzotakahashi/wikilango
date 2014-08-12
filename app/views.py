@@ -86,7 +86,8 @@ def startChat(topic_id):
 	if len(children) == 0:
 		return jsonify({'ai_response': 'too short'})
 
-	chatId = db.chat.insert({'user': current_user['sub'], 'user_phrases': [], 'ai_phrases': [], 'root': root['_id']})
+	chatId = db.chat.insert({'user': current_user['sub'], 'user_phrases': [], 'ai_phrases': [],
+							'root': root['_id'], 'language': language})
 	if turn == 0:
 		# print children
 		chat = db.chat.find_one({'_id': chatId})
@@ -131,7 +132,7 @@ def processChat(matched, chat):
 	else:
 		log = "Try again"
 		# ai_response = "Say again?"
-		ai_response = db.utilityPhrases.find_one({'intent': 'repeat', 'language': getLanguage()})['body']
+		ai_response = db.utilityPhrases.find_one({'intent': 'repeat', 'language': chat['language']})['body']
 
 	return jsonify({'ai_response': ai_response, 'choices': choices, 'log': log})
 
