@@ -1,0 +1,60 @@
+<div class="container">
+	<div class="row">
+		<div class="col-xs-8 col-md-8">
+
+			<ul frang-tree>
+			  <li frang-tree-repeat="node in treeData">
+			    <div>
+			  		<span class="glyphicon glyphicon-collapse-down" ng-if="!node.collapsed"
+			            ng-show="node.children && node.children.length > 0" ng-click="node.collapsed = !node.collapsed"></span>
+			  		<span class="glyphicon glyphicon-expand" ng-if="node.collapsed"
+			            ng-show="node.children && node.children.length > 0" ng-click="node.collapsed = !node.collapsed"></span>
+			      <span ng-class="{folder: node.children && node.children.length > 0}" ng-click="showEditForm(node)"
+			            ng-hover="hover(node)">{{node.body}}</span>
+			      <span><a ng-href="#/user/{{node.user}}">{{node.username}}</a></span>
+			      <span class="glyphicon glyphicon-plus" ng-click="showForm(node)" bs-tooltip="tooltipCreate"></span>
+			      <span ng-show="node.children && node.children.length === 0 && user._id === node.user"
+			      			class="glyphicon glyphicon-cog" ng-click="showEditForm(node)" bs-tooltip="tooltipEdit"></span>
+			      <span ng-show="node.children && node.children.length === 0 && user._id === node.user"
+			      			class="glyphicon glyphicon-trash" ng-click="deleteNode(node)" bs-tooltip="tooltipDelete"></span>
+			    </div>
+
+			    <ul ng-if="!node.collapsed && node.children && node.children.length > 0"
+			        frang-tree-insert-children="node.children"></ul>
+			  </li>
+			</ul>
+			<div class="glyphicon glyphicon-plus" ng-click="showForm()" ng-show="firstNode" bs-tooltip="tooltipCreate"></div>
+
+		</div>
+
+		<div class="col-xs-4 col-md-4">
+	  
+			<div class="btn-group" id="expand-collapse-all">
+			  <button type="button" class="btn btn-default" ng-click="expandAll()">Expand</button>
+			  <button type="button" class="btn btn-default" ng-click="collapseAll()">Collapse</button>
+			</div>
+
+			<form class="navbar-form navbar-left" role="search" ng-submit="submitPost()" ng-show="nodeSelected">
+				<p>New response to "{{selectedNode.body.substring(0,25)}}..."</p>
+			  <div class="form-group">
+			    <input type="text" class="form-control" placeholder="Phrase" ng-model="utterance" style="width: 300px" 
+			    autofocus required>
+			  </div>
+			  <button type="submit" class="btn btn-default">Submit</button>
+			  <!-- <button ng-click="cancel()" class="btn btn-default">Cancel</button> -->
+			</form>
+
+			<form class="navbar-form navbar-left" role="search" ng-submit="saveEdit()" ng-show="editNodeSelected">
+				<h5>Edit</h5>
+			  <div class="form-group">
+			    <input type="text" class="form-control" placeholder="Phrase" ng-model="editUtterance" style="width: 300px"
+			    autofocus required>
+			  </div>
+			  <button type="submit" class="btn btn-default">Save</button>
+			  <!-- <button ng-click="cancelEdit()" class="btn btn-default">Cancel</button> -->
+			</form>
+	 
+
+	  </div>
+	</div>
+</div>

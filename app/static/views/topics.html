@@ -1,0 +1,31 @@
+<div class="container">
+	<div>
+		<button type="button" class="btn btn-default" ng-click="showForm()">New Topic</button>
+	</div>
+
+	<br>
+
+	<form role="form" ng-submit="submit()" ng-show="form">
+	  <div class="form-group">
+	    <input type="text" class="form-control" placeholder="Topic" ng-model="newTopic" autofocus required>
+	  </div>
+	  <div class="form-group">
+	    <label for="language">Language</label>
+	    <select ng-model="language" ng-options="lang.name for lang in languages"></select>
+	  </div>
+	  <button type="submit" class="btn btn-default">Submit</button>
+	  <!-- <button ng-click="cancel()" class="btn btn-default">Cancel</button> -->
+	</form>
+<div>
+
+<div class="container">
+	<table class="table">
+		<tr ng-repeat="t in topics">
+			<td><img ng-src="static/images/flag-{{t.language}}.ico" alt={{t.language}} height="35" width="35"></td>
+			<td ng-show="{{t.count > 1}}"><a ng-href="#/chat/{{t._id}}"><h4>{{t.name}}</h4></a></td>
+			<td ng-show="{{t.count < 2}}"><h4>{{t.name}}</h4></td>
+			<td>{{t.count}}</td>
+			<td><a ng-href="#/topics/{{t._id}}">edit</a></td>
+		</tr>
+	</table>
+</div>

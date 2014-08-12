@@ -1,0 +1,23 @@
+.clickable {
+  cursor: pointer;
+}
+
+.mic {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.navbar-brand {
+	font-family: 'Rum Raisin', sans-serif;
+	font-size: 30px;
+	font-weight: 400;
+}
+
+.rum {
+	font-family: 'Rum Raisin', sans-serif;
+	font-size: 40px;
+	font-weight: 400;
+	color: rgb(50, 170, 201);
+}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

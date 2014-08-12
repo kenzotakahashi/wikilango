@@ -1,0 +1,59 @@
+<div class="alert alert-success alert-dismissible" role="alert" ng-show="alertEnd">
+  <button type="button" class="close" data-dismiss="alert">
+  <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  Good job!
+</div>
+
+<!-- <div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert">
+  <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  Error occured.
+</div> -->
+
+<div class="container">
+
+	<div>
+		<hr><label>Move:</label>
+		<div class="btn-group" ng-model="turn" bs-radio-group>
+		  <label class="btn btn-default"><input type="radio" class="btn btn-default" value="0"> First</label>
+		  <label class="btn btn-default"><input type="radio" class="btn btn-default" value="1"> Second</label>
+		</div>
+
+		<button type="button" class="btn btn-default" ng-click="startChat()">Start Chat</button>
+
+	  <span class="mic" ng-click="startRec()" bs-tooltip="tooltip">
+	  	<img ng-src="static/images/{{mic}}"/>	
+	  </span>
+	</div>
+
+</div>
+<!-- <img class="clickable" ng-src="static/images/mic-animate.gif" ng-click="startRec()"/> -->
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-6 col-md-6">
+<!-- 			<div>  
+			  <h3>{{userResponse}}</h3>
+			</div> -->
+
+			<h3>Chat History</h3>
+			<table class="table table-striped">
+				<tr ng-repeat="h in historyList">
+					<td>{{h.text}}</td>
+				</tr>
+			</table>
+		</div>
+
+
+		<div class="col-xs-6 col-md-6">
+			<h3>Choices</h3>
+			<table class="table">
+				<tr ng-repeat="choice in choices">
+					<td>{{choice.body}}</td>
+				</tr>
+			</table>		
+		</div>
+
+
+	</div>
+</div>
