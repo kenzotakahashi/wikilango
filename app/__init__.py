@@ -1,5 +1,6 @@
 from flask import Flask
 from pymongo import MongoClient
+import os
 # from flask.ext.pymongo import PyMongo
 
 from flask_sslify import SSLify

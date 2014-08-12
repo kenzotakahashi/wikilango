@@ -1,1 +1,1 @@
-web: gunicorn wikilango:app
+web: gunicorn heroku:app --log-file=-

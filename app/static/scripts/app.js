@@ -65,7 +65,7 @@ app.config(function ($routeProvider, authProvider, $httpProvider) {
 
       authProvider.init({
         domain: 'wikilango.auth0.com',
-        clientID: 'PsGBPA8ejkZtRf0tYW8SBfHE1JFR2S4B',
+        clientID: 'A6iqPklNDJWe7AKi2Wt7LuUpk1Iqjx5a',
         callbackURL: location.href,
         loginUrl: '/login'
       });
