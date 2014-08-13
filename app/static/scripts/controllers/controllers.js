@@ -339,6 +339,7 @@ utteranceControllers.controller('SettingsCtrl', function (auth, $scope, $http) {
 		$http.post('../api/v1.0/settings', info).success(function(data) {
 			$scope.username = data.username;
 			// $scope.language = setLanguage(data.language);
+      localStorage.setItem(data.auth, data.username);
 			$scope.showAlert = true;
 		});
 	};
