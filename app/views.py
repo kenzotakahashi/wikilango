@@ -203,7 +203,7 @@ def deleteTopic(topic_id):
 	if status['ok'] != 1:
 		print status
 
-	return jsonify({'status': status})
+	return jsonify({'status': 'test'})
 
 
 @app.route('/api/v1.0/utterance', methods = ['POST'])
