@@ -1,3 +1,6 @@
+ #!/usr/bin/python
+ # -*- coding: utf-8 -*-
+
 from app import app, db
 from flask import send_file, jsonify, abort, request, _request_ctx_stack
 from bson.objectid import ObjectId
@@ -81,15 +84,12 @@ def startChat(topic_id):
 	language = db.topics.find_one({'_id': ObjectId(topic_id)})['language']
 	root = db.utterances.find_one({'topic': ObjectId(topic_id), 'parent': None})
 
-	children = map(encodeUtterance, list(db.utterances.find({'parent': root['_id']})))
-	# If the tree root does not have any children, do not allow chat.
-	if len(children) == 0:
-		return jsonify({'ai_response': 'too short'})
-
 	chatId = db.chat.insert({'user': current_user['sub'], 'user_phrases': [], 'ai_phrases': [],
 							'root': root['_id'], 'language': language})
+
 	if turn == 0:
 		# print children
+		children = map(encodeUtterance, list(db.utterances.find({'parent': root['_id']})))
 		chat = db.chat.find_one({'_id': chatId})
 		db.chat.update({"_id": chatId}, {"$push": {"ai_phrases": {'_id': root['_id']}}})
 		ai_response = root['body']
@@ -108,10 +108,10 @@ def chat(chat_id):
 
 	if len(chat['ai_phrases']) == 0: # user went first
 		root = db.utterances.find_one({'_id': chat['root']})
-		matched = match([root], userResponse)
+		matched = match([root], userResponse, chat['language'])
 	else:
 		children = list(db.utterances.find({'parent': chat['ai_phrases'][-1]['_id']}))
-		matched = match(children, userResponse)
+		matched = match(children, userResponse, chat['language'])
 	return processChat(matched, chat)
 			
 def processChat(matched, chat):
@@ -136,14 +136,24 @@ def processChat(matched, chat):
 
 	return jsonify({'ai_response': ai_response, 'choices': choices, 'log': log})
 
-def match(utterances, userResponse):
-	userResponse = userResponse.lower()
-	for u in utterances:
-		# print re.sub(r'([\?\.!,])', '', u['body'].lower())
-		# print userResponse
-		if re.sub(r'([\?\.!,])', '', u['body'].lower()) == userResponse:
-			return u
-	return False
+def match(utterances, userResponse, language):
+	"""
+	?!., 	-> European languages, English, Korean
+	。、！？  -> Japanese, Chinese
+	，	    -> Traditional Chinese  Not available now
+	"""
+
+	if language == 'ja-JP' or language == 'zh-CN':
+		for utterance in utterances:
+			if utterance['body'].replace(u'？','').replace(u'！','').replace(u'、','').replace(u'。','') == userResponse:
+				return utterance
+		return False		
+	else:
+		userResponse = userResponse.lower()
+		for utterance in utterances:
+			if re.sub(r'([\?\.!,。、！？，])', '', utterance['body'].lower()) == userResponse:
+				return utterance
+		return False
 
 
 

@@ -13,11 +13,9 @@
 <div class="container">
 
 	<div>
-		<hr><label>Move:</label>
-		<div class="btn-group" ng-model="turn" bs-radio-group>
-		  <label class="btn btn-default"><input type="radio" class="btn btn-default" value="0"> First</label>
-		  <label class="btn btn-default"><input type="radio" class="btn btn-default" value="1"> Second</label>
-		</div>
+		<span>Move:</span>
+		<label class="radio-inline"><input type="radio" ng-model="turn" value="0"> First</label>
+		<label class="radio-inline"><input type="radio" ng-model="turn" value="1"> Second</label>
 
 		<button type="button" class="btn btn-default" ng-click="startChat()" ng-hide="alertError">Start Chat</button>
 

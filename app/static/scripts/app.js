@@ -60,7 +60,7 @@ app.config(function ($routeProvider, authProvider, $httpProvider) {
       })     
       .when('/', {
         templateUrl: 'static/views/home.html',
-        // controller: 'HomrCtrl'
+        controller: 'HomeCtrl'
       })
       .otherwise({
         redirectTo: '/'

@@ -23,8 +23,13 @@ utteranceControllers.controller('TopicsCtrl', function ($scope, $http) {
     {name:'Español', code:'es-ES'},
     {name:'Français', code:'fr-FR'},
     {name:'Italiano', code:'it-IT'},
-    {name:'Deutsch', code:'de-DE'}
+    {name:'Deutsch', code:'de-DE'},
+    {name:'中国的', code:'zh-CN'},
+    {name:'日本語', code:'ja-JP'},
+    {name:'한국의', code:'ko-KR'},
   ];
+
+
   $scope.language = $scope.languages[0];
   $scope.webSpeech = (('webkitSpeechRecognition' in window) ? true:false);
 
@@ -193,12 +198,9 @@ utteranceControllers.controller('ChatCtrl', function ($scope, $http, $routeParam
     $scope.chatStarted = true;
 
 		$http.post('../api/v1.0/startchat/' + $routeParams.topicId, {'turn': $scope.turn}).success(function(data) {
-			if (data.ai_response == 'too short') {
-				console.log('too short');
-				return;
-			}
 
 			speechAI.lang = data.language;
+      $scope.recognition.lang = data.language;
 			$scope.choices = data.choices;
 			chat_id = data.id;
 			if (data.ai_response === null) {
@@ -214,7 +216,7 @@ utteranceControllers.controller('ChatCtrl', function ($scope, $http, $routeParam
   	// $scope.mic = 'mic.png';
     if (event.results.length > 0) {
       $scope.userResponse = event.results[0][0].transcript;
-      console.log($scope.userResponse);
+      // console.log($scope.userResponse);
 
 			$http.post('../api/v1.0/chat/' + chat_id, {'userResponse': $scope.userResponse}).success(function(data) {
 				console.log("log: " + data.log);
@@ -343,9 +345,6 @@ utteranceControllers.controller('SettingsCtrl', function (auth, $scope, $http) {
   //   {name:'Deutsch', code:'de-DE'}
   // ];
 
- // {name:'日本語', code:'ja-JP'},
- // {name:'한국의', code:'ko-KR'},
- // {name:'中国的', code:'zh-CN'},
 
 	$http.get('../api/v1.0/user/current').success(function(data) {
 		$scope.username = data.username;
@@ -389,6 +388,9 @@ utteranceControllers.controller('LogoutCtrl', function (auth, $location) {
   $location.path('/');
 });
 
+utteranceControllers.controller('HomeCtrl', function (auth, $scope, $location) {
+  $scope.auth = auth;
+});
 
 
 // var ModalDemoCtrl = function ($scope, $modal, $log) {
