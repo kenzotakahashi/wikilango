@@ -1,3 +1,10 @@
+<div class="alert alert-danger alert-dismissible" role="alert" ng-hide="webSpeech">
+  <button type="button" class="close" data-dismiss="alert">
+  <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  Chat functionality is not supported by this browser. Use 
+  <a href="http://www.google.com/chrome" target="_blank">Chrome</a>.
+</div>
+
 <div class="container">
 	<div>
 		<button type="button" class="btn btn-default" ng-click="showForm()">New Topic</button>
@@ -18,12 +25,15 @@
 	</form>
 <div>
 
+<br>
+
 <div class="container">
 	<table class="table">
 		<tr ng-repeat="t in topics">
 			<td><img ng-src="static/images/flag-{{t.language}}.ico" alt={{t.language}} height="35" width="35"></td>
-			<td ng-show="{{t.count > 1}}"><a ng-href="#/chat/{{t._id}}"><h4>{{t.name}}</h4></a></td>
-			<td ng-show="{{t.count < 2}}"><h4>{{t.name}}</h4></td>
+			<td ng-show="webSpeech && {{t.count > 1}}">
+			<a ng-href="#/chat/{{t._id}}"><h4>{{t.name}}</h4></a></td>
+			<td ng-show="webSpeech === false || {{t.count < 2}}"><h4>{{t.name}}</h4></td>
 			<td>{{t.count}}</td>
 			<td><a ng-href="#/topics/{{t._id}}">edit</a></td>
 		</tr>

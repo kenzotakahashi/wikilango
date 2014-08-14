@@ -1,5 +1,8 @@
 var utteranceControllers = angular.module('utteranceControllers', []);
-speechAI = new SpeechSynthesisUtterance();
+if ('SpeechSynthesisUtterance' in window) {
+  speechAI = new SpeechSynthesisUtterance();
+}
+
 
 utteranceControllers.controller('NavCtrl', function (auth, $scope, $http) {
 	$scope.auth = auth;
@@ -23,6 +26,7 @@ utteranceControllers.controller('TopicsCtrl', function ($scope, $http) {
     {name:'Deutsch', code:'de-DE'}
   ];
   $scope.language = $scope.languages[0];
+  $scope.webSpeech = (('webkitSpeechRecognition' in window) ? true:false);
 
   $http.get('../api/v1.0/topics').success(function(data) {
     $scope.topics = data.topics;
@@ -57,7 +61,7 @@ utteranceControllers.controller('TopicsCtrl', function ($scope, $http) {
 // 	'username',
 // }
 
-utteranceControllers.controller('EditCtrl', function ($scope, $http, $routeParams) {
+utteranceControllers.controller('EditCtrl', function ($scope, $http, $routeParams, $location) {
 	$scope.utterance;
 	$scope.nodeSelected = false;
 	$scope.selectedNode;	
@@ -139,6 +143,12 @@ utteranceControllers.controller('EditCtrl', function ($scope, $http, $routeParam
   	});	
   };
 
+  $scope.deleteTopic = function() {
+    $http.delete('../api/v1.0/topics/' + $routeParams.topicId).success(function(data) {
+      $location.path('/topics');
+    }); 
+  }
+
   function checkTree(tree) {
   	if (tree === null) {
   		$scope.firstNode = true;
@@ -156,21 +166,11 @@ function addExpandAllCollapseAll($scope) {
     function rec(nodes, action) {
         for (var i = 0 ; i < nodes.length ; i++) {
             action(nodes[i]);
-            if (nodes[i].children) {
-                rec(nodes[i].children, action);
-            }
+            if (nodes[i].children) {rec(nodes[i].children, action);}
         }
     }
-    $scope.collapseAll = function () {
-        rec($scope.treeData, function (node) {
-            node.collapsed = true;
-        });
-    };
-    $scope.expandAll = function () {
-        rec($scope.treeData, function (node) {
-            node.collapsed = false;
-        });
-    };
+    $scope.collapseAll = function () {rec($scope.treeData, function (node) {node.collapsed = true;});};
+    $scope.expandAll = function () {rec($scope.treeData, function (node) {node.collapsed = false;});};
 }
 
 utteranceControllers.controller('ChatCtrl', function ($scope, $http, $routeParams, $alert) {
@@ -178,11 +178,11 @@ utteranceControllers.controller('ChatCtrl', function ($scope, $http, $routeParam
   $scope.userResponse = "";
   $scope.choices = [];
   $scope.turn = 0;
-  $scope.mic = 'mic.png';
   $scope.historyList = [];
   $scope.tooltip = {"title": "Start / Stop speaking"}
   $scope.alertEnd = false;
-  $scope.alertError = false;
+  $scope.chatStarted = false;
+  var recording = false;
   var chat_id;
   var miss = false;
 
@@ -190,6 +190,7 @@ utteranceControllers.controller('ChatCtrl', function ($scope, $http, $routeParam
 	$scope.startChat = function() {
 		$scope.historyList = [];
 		$scope.alertEnd = false;
+    $scope.chatStarted = true;
 
 		$http.post('../api/v1.0/startchat/' + $routeParams.topicId, {'turn': $scope.turn}).success(function(data) {
 			if (data.ai_response == 'too short') {
@@ -246,7 +247,19 @@ utteranceControllers.controller('ChatCtrl', function ($scope, $http, $routeParam
     }
   };
 
+  $scope.recognition.onstart = function(event) {
+    recording = true;
+    start_img.src = "static/images/mic-animate.gif"
+  }  
+
+  $scope.recognition.onend = function(event) {
+    recording = false;
+    start_img.src = "static/images/mic.png"
+  }
+
   $scope.recognition.onerror = function(event) {
+    recording = false;
+    start_img.src = "static/images/mic.png"
   	console.log("error: " + event.error);
   	// $scope.historyList.push({'text': 'error'});
   };
@@ -254,7 +267,15 @@ utteranceControllers.controller('ChatCtrl', function ($scope, $http, $routeParam
   $scope.startRec = function() {
   	// $scope.mic = 'mic-animate.gif';
   	// $scope.alertError = false;
-  	$scope.recognition.start();
+    if (recording) {
+      $scope.recognition.stop();
+      recording = false;
+      start_img.src = "static/images/mic.png"
+    } else {
+      $scope.recognition.start();
+      start_img.src = "static/images/mic-slash.png"
+    }
+  	
   };
 
   $scope.end = function() {
@@ -294,22 +315,22 @@ utteranceControllers.controller('UserCtrl', function ($scope, $http, $routeParam
 	});
 });
 
-utteranceControllers.controller('AccountCtrl', function (auth, $scope, $http) {
-  $scope.auth = auth;
-  // TODO: use $watch
-	$http.post('../api/v1.0/signup', {'username': 'user'}).success(function(data) {
-		$scope.user = data.user;
-		localStorage.setItem(data.user.auth, data.user.username);
-	});
+// utteranceControllers.controller('AccountCtrl', function (auth, $scope, $http) {
+//   $scope.auth = auth;
+//   // TODO: use $watch
+// 	$http.post('../api/v1.0/signup', {'username': 'user'}).success(function(data) {
+// 		$scope.user = data.user;
+// 		localStorage.setItem(data.user.auth, data.user.username);
+// 	});
 
-	// var u = new SpeechSynthesisUtterance();
-	// var voices = window.speechSynthesis.getVoices();
-	// u.text = "";
-	// u.lang = 'ja-JP';
-	// u.voice = "Google UK English Female";
-	// speechSynthesis.speak(u);
+// 	// var u = new SpeechSynthesisUtterance();
+// 	// var voices = window.speechSynthesis.getVoices();
+// 	// u.text = "";
+// 	// u.lang = 'ja-JP';
+// 	// u.voice = "Google UK English Female";
+// 	// speechSynthesis.speak(u);
 
-});
+// });
 
 utteranceControllers.controller('SettingsCtrl', function (auth, $scope, $http) {
 	$scope.username;

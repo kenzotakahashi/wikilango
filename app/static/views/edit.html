@@ -34,6 +34,8 @@
 			  <button type="button" class="btn btn-default" ng-click="collapseAll()">Collapse</button>
 			</div>
 
+			<button type="button" class="btn btn-danger" ng-click="deleteTopic()" ng-if="treeData === null">Delete this topic</button>
+
 			<form class="navbar-form navbar-left" role="search" ng-submit="submitPost()" ng-show="nodeSelected">
 				<p>New response to "{{selectedNode.body.substring(0,25)}}..."</p>
 			  <div class="form-group">

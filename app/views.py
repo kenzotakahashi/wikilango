@@ -195,6 +195,17 @@ def get_tree(topic_id):
 	# print tree
 	return jsonify({'tree': tree, 'user': user})
 
+
+@app.route('/api/v1.0/topics/<topic_id>', methods = ['DELETE'])
+@requires_auth
+def deleteTopic(topic_id):
+	status = db.topics.remove({'_id': ObjectId(topic_id)})
+	if status['ok'] != 1:
+		print status
+
+	return jsonify({'status': status})
+
+
 @app.route('/api/v1.0/utterance', methods = ['POST'])
 @requires_auth
 def createUtterance():

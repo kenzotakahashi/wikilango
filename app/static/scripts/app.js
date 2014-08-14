@@ -51,6 +51,9 @@ app.config(function ($routeProvider, authProvider, $httpProvider) {
         /* isAuthenticated will prevent user access to forbidden routes */
         requiresLogin: true
       })
+      .when('/contact', {
+        templateUrl: 'static/views/contact.html',
+      })
       .when('/user/:userId', {
         templateUrl: 'static/views/user.html',
         controller: 'UserCtrl'
@@ -71,7 +74,7 @@ app.config(function ($routeProvider, authProvider, $httpProvider) {
       });
 
       authProvider.on('loginSuccess', function($location, $http) {
-        $http.post('../api/v1.0/signup', {'username': 'user'}).success(function(data) {
+        $http.post('../api/v1.0/signup', {'username': 'User'}).success(function(data) {
           localStorage.setItem(data.user.auth, data.user.username);
         });
         $location.path('/topics');
