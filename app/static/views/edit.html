@@ -1,33 +1,7 @@
 <div class="container">
 	<div class="row">
-		<div class="col-xs-8 col-md-8">
 
-			<ul frang-tree>
-			  <li frang-tree-repeat="node in treeData">
-			    <div>
-			  		<span class="glyphicon glyphicon-collapse-down" ng-if="!node.collapsed"
-			            ng-show="node.children && node.children.length > 0" ng-click="node.collapsed = !node.collapsed"></span>
-			  		<span class="glyphicon glyphicon-expand" ng-if="node.collapsed"
-			            ng-show="node.children && node.children.length > 0" ng-click="node.collapsed = !node.collapsed"></span>
-			      <span ng-class="{folder: node.children && node.children.length > 0}" ng-click="showEditForm(node)"
-			            ng-hover="hover(node)">{{node.body}}</span>
-			      <span><a ng-href="#/user/{{node.user}}">{{node.username}}</a></span>
-			      <span class="glyphicon glyphicon-plus" ng-click="showForm(node)" bs-tooltip="tooltipCreate"></span>
-			      <span ng-show="node.children && node.children.length === 0 && user._id === node.user"
-			      			class="glyphicon glyphicon-cog" ng-click="showEditForm(node)" bs-tooltip="tooltipEdit"></span>
-			      <span ng-show="node.children && node.children.length === 0 && user._id === node.user"
-			      			class="glyphicon glyphicon-trash" ng-click="deleteNode(node)" bs-tooltip="tooltipDelete"></span>
-			    </div>
-
-			    <ul ng-if="!node.collapsed && node.children && node.children.length > 0"
-			        frang-tree-insert-children="node.children"></ul>
-			  </li>
-			</ul>
-			<div class="glyphicon glyphicon-plus" ng-click="showForm()" ng-show="firstNode" bs-tooltip="tooltipCreate"></div>
-
-		</div>
-
-		<div class="col-xs-4 col-md-4">
+		<div class="col-xs-12 col-md-4">
 	  
 			<div class="btn-group" id="expand-collapse-all">
 			  <button type="button" class="btn btn-default" ng-click="expandAll()">Expand</button>
@@ -58,5 +32,34 @@
 	 
 
 	  </div>
+
+		<div class="col-xs-12 col-md-8">
+
+			<ul frang-tree>
+			  <li frang-tree-repeat="node in treeData">
+			    <div>
+			  		<span class="glyphicon glyphicon-collapse-down" ng-if="!node.collapsed"
+			            ng-show="node.children && node.children.length > 0" ng-click="node.collapsed = !node.collapsed"></span>
+			  		<span class="glyphicon glyphicon-expand" ng-if="node.collapsed"
+			            ng-show="node.children && node.children.length > 0" ng-click="node.collapsed = !node.collapsed"></span>
+			      <span ng-class="{folder: node.children && node.children.length > 0}" ng-click="showEditForm(node)"
+			            ng-hover="hover(node)">{{node.body}}</span>
+			      <span><a ng-href="#/user/{{node.user}}">{{node.username}}</a></span>
+			      <span class="glyphicon glyphicon-plus" ng-click="showForm(node)" bs-tooltip="tooltipCreate"></span>
+			      <span ng-show="node.children && node.children.length === 0 && user._id === node.user"
+			      			class="glyphicon glyphicon-cog" ng-click="showEditForm(node)" bs-tooltip="tooltipEdit"></span>
+			      <span ng-show="node.children && node.children.length === 0 && user._id === node.user"
+			      			class="glyphicon glyphicon-trash" ng-click="deleteNode(node)" bs-tooltip="tooltipDelete"></span>
+			    </div>
+
+			    <ul ng-if="!node.collapsed && node.children && node.children.length > 0"
+			        frang-tree-insert-children="node.children"></ul>
+			  </li>
+			</ul>
+			<div class="glyphicon glyphicon-plus" ng-click="showForm()" ng-show="firstNode" bs-tooltip="tooltipCreate"></div>
+
+		</div>
+
+
 	</div>
 </div>

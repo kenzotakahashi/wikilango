@@ -1,8 +1,6 @@
 from flask import Flask
 from pymongo import MongoClient
 import os
-# from flask.ext.pymongo import PyMongo
-from flask_sslify import SSLify
 import logging
 from logging import StreamHandler
 
@@ -12,6 +10,8 @@ app = Flask(__name__)
 if os.environ.get('MONGOHQ_URL'):
     client = MongoClient(os.environ['MONGOHQ_URL'])
     db = client.app28410175
+    from flask_sslify import SSLify
+    sslify = SSLify(app)
 else:
     client = MongoClient()
     db = client.wikilango
@@ -23,7 +23,5 @@ app.logger.addHandler(file_handler)
 
 app.config.from_object('config')
 
-# mongo = PyMongo(app)
-# sslify = SSLify(app)
 
 from app import views
