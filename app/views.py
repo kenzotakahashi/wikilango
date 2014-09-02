@@ -12,7 +12,7 @@ import jwt, base64, os, re, random
 
 fin = open('.secret', 'r')
 CLIENT_ID = fin.readline()[0:-1]
-CLIENT_SECRET = fin.readline()
+CLIENT_SECRET = fin.readline()[0:-1]
 
 # Authentication annotation
 current_user = LocalProxy(lambda: _request_ctx_stack.top.current_user)
