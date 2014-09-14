@@ -10,8 +10,8 @@ app = Flask(__name__)
 if os.environ.get('MONGOHQ_URL'):
     client = MongoClient(os.environ['MONGOHQ_URL'])
     db = client.app28410175
-    from flask_sslify import SSLify
-    sslify = SSLify(app)
+    # from flask_sslify import SSLify
+    # sslify = SSLify(app)
 else:
     client = MongoClient()
     db = client.wikilango
