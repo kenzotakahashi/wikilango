@@ -10,7 +10,7 @@ utteranceControllers.controller('NavCtrl', function (auth, $scope, $http) {
 	// This function gets called a lot. Might need refactoring.
 	$scope.username = function(id) {
 		return localStorage.getItem(id);
-	}
+	};
 });
 
 
